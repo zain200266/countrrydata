@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+    integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body class="bg-dark">
+  <div class="container text-center" style="min-height: 100vh;">
+    <h1 class="text-warning"> COUNTRY INFO </h1>
+    <div id="output" class="d-flex align-item-center justify-content-center mt-5 w-100">
+      <input type="text" class="form-control w-50" id="userinput" placeholder="ENTER COUNTRY NAME">
+      <button class="btn btn-success  ms-3" onclick="find()"><i
+          class="fa-solid fa-magnifying-glass fa-bounce"></i></button>
+    </div>
+   
+</body>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+  integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+
+<script>
+  const find = async () => {
+    if (userinput.value != "") {
+      try {
+        const response = await fetch(`https://restcountries.com/v3.1/name/${userinput.value}?fullText=true`)
+        const result = await response.json()
+        if (result.status == 404) {
+          output.innerHTML = `<h3 class="text-danger">${result.message}</h3>`
+        }
+        else {
+          console.log(result[0]);
+          const countrydetails = result[0]
+          output.innerHTML=`<div class="d-flex align-item-center justify-content-center mt-5 w-100 rounded p-5"
+      style="background-color: bisque;">
+      <div class="row w-100 p-5">
+        <div class="col-6">
+          <h3 class="text-danger"> ${countrydetails.name.common} </h3>
+          <img src="${countrydetails.flags.png}" width="300px" height="300px" alt=""> <br>
+          <a href="">${countrydetails.maps.googleMaps}</a>
+        </div>
+        <div class="col-6 mt-5">
+          <ul class="list-group">
+            <li class="list-group-item"> Capital:<span class="text-danger  fw-bolder">${countrydetails.capital}</span></li>
+            <li class="list-group-item"> Population:<span class="text-danger  fw-bolder">${countrydetails.population}</span></li>
+            <li class="list-group-item"> Time-Zone:<span class="text-danger  fw-bolder">${countrydetails.timezones}</span></li>
+            <li class="list-group-item"> Continent:<span class="text-danger  fw-bolder">${countrydetails.continents}</span></li>
+            <li class="list-group-item"> Language:<span class="text-danger  fw-bolder">${Object.values(countrydetails.languages)}</span></li>
+            <li class="list-group-item"> Currency:<span class="text-danger  fw-bolder">${Object.values(countrydetails.currencies)[0].symbol}  ${Object.values(countrydetails.currencies)[0].name}</span></li>
+          </ul>
+        </div>
+
+      </div>
+    </div>`
+
+        }
+
+      }
+      catch (err) {
+        console.log(err);
+        alert("api failed")
+      }
+    }
+    else {
+      output.innerHTML = `<h3 class="text-danger"> ENTER  A VALID COUNTRY NAME </h3>`
+    }
+  }
+</script>
+
+
+</html>
